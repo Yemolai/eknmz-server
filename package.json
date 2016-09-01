@@ -1,0 +1,22 @@
+{
+  "name": "eknmz",
+  "version": "1.0.0",
+  "description": "API and website server for eknmz app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "api",
+    "node",
+    "mean",
+    "express",
+    "app",
+    "android",
+    "mobile",
+    "ionic",
+    "server"
+  ],
+  "author": "Romulo Gabriel Rodrigues",
+  "license": "GPL-3.0"
+}
