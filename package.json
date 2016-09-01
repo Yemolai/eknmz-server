@@ -4,7 +4,8 @@
   "description": "API and website server for eknmz app",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [
     "api",
@@ -17,6 +18,13 @@
     "ionic",
     "server"
   ],
+  "repository": "https://github.com/Yemolai/eknmz-server",
   "author": "Romulo Gabriel Rodrigues",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "dependencies": {
+    "express": "^4.14.0",
+    "pg": "^6.1.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.24.1"
+  }
 }
