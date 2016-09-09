@@ -6,10 +6,12 @@ module.exports = {
   },
   db: {
     dialect: 'postgres?',
+    timezone: '-03:00',
     host: 'postgres_host',
     port: 5432,
     db: 'postgres_database',
     username: 'login_role_name',
     password: 'login_role_password'
-  }
+  },
+  debug: false
 }

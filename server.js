@@ -1,16 +1,20 @@
 'use strict'
 const express = require('express')
+const bodyParser = require('body-parser')
 const path = require('path')
 const Sequelize = require('sequelize')
-const cfg = require('./.cfg.js')
+const cfg = require('./.cfg')
 
 const DEFAULT_PORT = 8080
 const UNDEF = 'undefined'
+
+var apiRouter = require('./modules/api_router/router.js')
 
 var spa = express();
 var api = express();
 
 spa.use(express.static(__dirname + "/public"));
+api.use(bodyParser.json({'strict': true}));
 
 api.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -18,6 +22,7 @@ api.use(function(req, res, next) {
   next();
 });
 
+api.use(apiRouter);
 api.get('/', function (req, res) {
   res.json({
     message: "Express Rest Server is Working!",
@@ -25,18 +30,22 @@ api.get('/', function (req, res) {
   })
 })
 
-var db = new Sequelize(cfg.db.database, cfg.db.username, cfg.db.password, {
-  host: cfg.db.host,
-  dialect: cfg.db.dialect
-});
+// Basic error handling
+api.use(function (err, req, res, next) {
+  res.status(err.status || 500)
+  let responseData = { error: true, message: err.message }
+  if (api.get('env') == 'development') { responseData.stack = err }
+  res.json(responseData)
+})
+
 
 var serverPort;
 // verificação e definição de porta de servidor
-if (typeof process.ENV != UNDEF && typeof process.ENV.port != UNDEF) {
+if (!(typeof process.ENV == UNDEF || typeof process.ENV.port == UNDEF)) {
   serverPort = process.ENV.port;
-} else if (typeof cfg != UNDEF &&
-            typeof cfg.server != UNDEF &&
-              typeof cfg.server.port != UNDEF) {
+} else if(!(typeof cfg == UNDEF ||
+            typeof cfg.server == UNDEF ||
+            typeof cfg.server.port == UNDEF)) {
   serverPort = cfg.server.port;
 } else {
   serverPort = DEFAULT_PORT;
