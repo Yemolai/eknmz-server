@@ -8,11 +8,12 @@ module.exports = (db, tipo) =>
     },
     razaoSocial: {
       type: tipo.STRING,
-      allowNull: false,
+      allowNull: true, // CAN BE NULL
+      unique: true,
     },
     cnpj: {
       type: tipo.STRING,
-      allowNull: false,
+      allowNull: true, // CAN BE NULL
       unique: true,
       validate: {
         isNumeric: true,
@@ -21,15 +22,17 @@ module.exports = (db, tipo) =>
     },
     endereco: {
       type: tipo.STRING,
-      allowNull: false,
+      allowNull: true, // CAN BE NULL
     },
     latitude: {
-      type: tipo.FLOAT,
+      type: tipo.DOUBLE,
       allowNull: false,
+      unique: 'positionIDX'
     },
     longitude: {
-      type: tipo.FLOAT,
+      type: tipo.DOUBLE,
       allowNull: false,
+      unique: 'positionIDX'
     },
     ativo: {
       type: tipo.BOOLEAN,

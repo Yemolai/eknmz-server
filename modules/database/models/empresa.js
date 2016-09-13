@@ -12,6 +12,7 @@ module.exports = (db, tipo) =>
     razaoSocial: {
       type: tipo.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         is: /[0-9a-zà-úA-ZÀ-Ú\s\-\/\:\.\,]+/i,
         notEmpty: true,
@@ -20,6 +21,7 @@ module.exports = (db, tipo) =>
     cnpj: {
       type: tipo.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         isNumeric: true,
         len: [11, 11],
@@ -30,6 +32,7 @@ module.exports = (db, tipo) =>
     },
     telefone: {
       type: tipo.STRING,
+      unique: true,
       validate: {
         isNumeric: true,
         len: [8, 13],

@@ -1,5 +1,7 @@
-var express = require('express');
-var router = express.Router();
+'use strict'
+const express = require('express')
+const router = express.Router()
+const ROUTES = './routes'
 
 router.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -14,6 +16,7 @@ router.get('/', function (req, res) {
   })
 })
 
-router.use('/estabelecimento', require('./routes/estabelecimento'))
+router.use('/estabelecimento', require(ROUTES + '/estabelecimento'))
+router.use('/categoria', require(ROUTES + '/categoria'))
 
 module.exports = router
