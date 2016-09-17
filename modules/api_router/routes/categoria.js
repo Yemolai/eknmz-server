@@ -3,6 +3,7 @@
 const db = require('../../database/db.js')
 const express = require('express')
 const cat = express.Router()
+const error = require('../error-handling.js')
 
 cat.get('/', function (req, res) {
   db.model.Categoria.findAll({
@@ -21,33 +22,19 @@ cat.get('/', function (req, res) {
 
 cat.get('/id/:id', function (req, res) {
   let Id = parseInt(req.params.id)
-  if (!isNaN(Id)) {
-    db.model.Categoria.findOne({
-      'where': {
-        'id': Id
-      },
-      'attributes': [
-        'nome',
-        'descricao'
-      ]
-    }).then(function (categoria) {
-      if (categoria == null)
-        res.json({
-          'error': true,
-          'message': 'Item with id ' + Id + ' does not exist'
-        })
-      else
-        res.json({
-          'error': false,
-          'data': categoria
-        })
-      })
-  } else {
-    res.json({
-      'error': true,
-      'message': 'Non-numeric id provided'
-    })
-  }
+  if (isNaN(Id)) { return error.response(res, error.ID_NON_NUMERIC) }
+  db.model.Categoria.findOne({
+    'where': {
+      'id': Id
+    },
+    'attributes': [
+      'nome',
+      'descricao'
+    ]
+  }).then(function (categoria) {
+    if (categoria == null) { return error.response(res, error.ID_NOT_FOUND) }
+    return res.json({ 'error': false, 'data': categoria })
+  })
 })
 
 cat.post('/', function (req, res) {
@@ -60,8 +47,9 @@ cat.post('/', function (req, res) {
         missing.push(required[i])
       }
     }
-    if (missing.length > 0)
-      res.json({error: true, message: "Missing fields: " + missing.join(', '),})
+    if (missing.length > 0) {
+      error.response(res, error.PARAMETER_MISSING + missing.join(', '))
+    }
     let data = req.body;
     let createData = {
       'nome': data.nome,
@@ -76,19 +64,35 @@ cat.post('/', function (req, res) {
           created: created
         }
       })
-    }).catch(function (err) {
-      console.log("Erro ao adicionar categoria: ", err);
-      res.json({
-        error: true,
-        message: 'Error while creating data: ' + err.message
-      })
     })
+    .catch((e)=>error.response(res, e, error.DATABASE_POST))
   } else {
-    res.json({
-      error: true,
-      message: 'No data received'
-    })
+    return error.response(res, error.NO_BODY)
   }
+})
+
+/**
+ *
+ *
+ *
+*/
+cat.put("/:id", (req, res)=>{
+  res.json({
+    error: false,
+    data: {}
+  })
+})
+
+/**
+ *
+ *
+ *
+*/
+cat.delete("/:id", (req, res)=>{
+  res.json({
+    error: false,
+    data: {}
+  })
 })
 
 module.exports = cat

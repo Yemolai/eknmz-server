@@ -16,7 +16,16 @@ router.get('/', function (req, res) {
   })
 })
 
-router.use('/estabelecimento', require(ROUTES + '/estabelecimento'))
-router.use('/categoria', require(ROUTES + '/categoria'))
+let routers = [
+  'categoria',
+  'empresa',
+  'estabelecimento',
+  'marca',
+  'produto',
+  'valor'
+]
+for (var i = 0; i < routers.length; i++) {
+  router.use(('/' + routers[i]), require((ROUTES + '/' + routers[i])))
+}
 
 module.exports = router
